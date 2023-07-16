@@ -1,0 +1,5 @@
+- hosts: morpheus
+  become: true
+  tasks:
+    - import_tasks: playbooks/omv.yml
+    - import_tasks: playbooks/git.yml

@@ -1,0 +1,24 @@
+- name: gnupg package is installed
+  package: name=gnupg
+
+- name: OMV's gpg key is downloaded
+  apt_key: url=https://packages.openmediavault.org/public/archive.key
+
+- name: OMV's package repository is registered
+  lineinfile:
+    path: /etc/apt/sources.list.d/openmediavault.list
+    line: deb https://packages.openmediavault.org/public shaitan main
+    create: true
+  when: 
+
+- name: OMV is installed
+  apt:
+    update_cache: true
+    allow_change_held_packages: true
+    allow_downgrades: true
+    install_recommends: false
+    dpkg_options: force-confdef,force-confold
+    autoremove: true
+    name:
+      - openmediavault-keyring
+      - openmediavault

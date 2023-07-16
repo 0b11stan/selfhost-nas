@@ -1,0 +1,21 @@
+- name: git installed
+  package: name=git
+
+- name: git user exists
+  user:
+    name: git
+    groups: ssh
+    home: /srv/git
+    shell: /usr/bin/git-shell
+
+- name: authorized keys are uploaded
+  authorized_key:
+    user: git
+    key: https://github.com/myuser.keys
+
+- name: init the git repo
+  become_user: git
+  command: "git init --bare /srv/git/{{ item }}.git"
+  args:
+    creates: "/srv/git/{{ item }}.git/HEAD"
+  loop: "{{ git_projects }}"
